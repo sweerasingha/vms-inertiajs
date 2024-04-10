@@ -44,4 +44,35 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the user's permissions for the JavaScript front end.
+     *
+     * @return array
+     */
+    public function jsPermissions()
+    {
+        // This is just an example. You'll need to replace this with your actual logic
+        // for fetching and returning the user's permissions.
+        return [
+            'can_edit_posts' => $this->canEditPosts(),
+            'can_delete_posts' => $this->canDeletePosts(),
+            // Add other permissions as needed...
+        ];
+    }
+
+    // Example methods for determining specific permissions.
+    // You'll need to implement these based on your application's logic.
+    protected function canEditPosts()
+    {
+        // Your logic here
+        return true; // Example value
+    }
+
+    protected function canDeletePosts()
+    {
+        // Your logic here
+        return false; // Example value
+    }
+
 }

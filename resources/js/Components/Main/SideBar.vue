@@ -55,6 +55,18 @@
                             </a>
                             <ul class="collapse list-unstyled" id="settingsMenu">
                                 <!-- Settings Items Here -->
+                                <li class="nav-item">
+                                    <a class="nav-link">
+                                        <font-awesome-icon icon="fa-solid fa-gear" class="ml-4" />
+                                        <span class="ml-2 hide-menu">Vehicle Categories</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link">
+                                        <font-awesome-icon icon="fa-solid fa-warehouse" class="ml-4" />
+                                        <span class="ml-2 hide-menu">User Management</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

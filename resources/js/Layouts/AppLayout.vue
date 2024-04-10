@@ -1,80 +1,69 @@
 <template>
-    <div>
-        <div class="d-flex flex-column content-container">
-            <div class="flex-grow-1">
-                <Head :title="title ? title : 'IMake'">
-                    <link rel="icon" type="image/svg+xml" href="/img/logo/logoN.png" />
-                    <slot name="meta_head" />
-                </Head>
-                <SideBar />
-                <div class="main-content" id="panel">
-                    <NavBar />
-                    <slot name="header" />
-                    <div class="container-fluid mt--6">
-                        <slot name="content" />
-                    </div>
-                </div>
-                <slot name="modals" />
+    <div class="app-container">
+        <Head :title="title ? title : 'IMake'">
+            <link rel="icon" type="image/svg+xml" href="/img/logo/logoN.png" />
+            <slot name="meta_head" />
+        </Head>
+        <SideBar />
+        <div class="main-content" id="panel">
+            <NavBar />
+            <slot name="header" />
+            <div class="container-fluid mt--6">
+                <slot name="content" />
             </div>
-            <Footer />
+            <slot name="modals" />
+            <Notification ref="notification" />
+            <Loader ref="loader" />
         </div>
-        <Notification ref="notification" />
-        <Loader ref="loader" />
+        <Footer />
     </div>
 </template>
 
-
-
 <script>
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3';
 import SideBar from '@/Components/Main/SideBar.vue';
 import NavBar from '@/Components/Main/NavBar.vue';
 import Notification from '@/Components/Basic/Notification.vue';
 import Loader from '@/Components/Basic/LoadingBar.vue';
 import Footer from '@/Components/Main/Footer.vue';
 
-
 export default {
-    components: {
-        Head,
-        Link,
-        SideBar,
-        NavBar,
-        Notification,
-        Loader,
-        Footer,
-    },
-    props: {
-        title: String,
-    },
-    data() {
-
-    },
-    mounted() {
-        this.$root.notify = this.$refs.notification
-        this.$root.loader = this.$refs.loader
-    },
-    methods: {
-
-    },
-}
+  components: {
+    Head,
+    Link,
+    SideBar,
+    NavBar,
+    Notification,
+    Loader,
+    Footer,
+  },
+  props: {
+    title: String,
+  },
+  mounted() {
+    this.$root.notify = this.$refs.notification;
+    this.$root.loader = this.$refs.loader;
+  },
+};
 </script>
 
 <style lang="scss">
 body, html {
-    height: 100%;
-    margin: 0;
+    height: 100%; // Ensure the HTML and body take up full viewport height
 }
 
-.content-container {
-    min-height: 100vh;
+.app-container {
     display: flex;
     flex-direction: column;
+    height: 100vh; // Use 100vh to make sure the container takes up at least the full viewport height
 }
 
-.flex-grow-1 {
-    flex-grow: 1;
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1; // This allows the main content to expand and fill the available space
 }
+
 body {
     background-image: url('@/../src/img/banner/bg.png');
     background-size: cover;

@@ -12,10 +12,18 @@
                     <!-- Nav items -->
                     <ul class="mb-3 navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link">
-                                <font-awesome-icon icon="fa-solid fa-desktop" />
-                                <span class="ml-2 nav-link-text font-weight-400">Dashboard</span>
-                            </a>
+                            <Link :class="{ 'active': route().current() == 'dashboard' }"
+                                class="nav-link active-preloader" :href="route('dashboard')">
+                            <font-awesome-icon icon="fa-solid fa-desktop" />
+                            <span class="ml-2 nav-link-text font-weight-400">Dashboard</span>
+                            </Link>
+                        </li>
+                        <li class="nav-item" >
+                            <Link :class="{ 'active': $page.url.startsWith('/vendors') }" class="nav-link active-preloader"
+                                :href="route('vendors.index')">
+                            <font-awesome-icon icon="fa-solid fa-building-user" />
+                            <span class="ml-2 nav-link-text font-weight-400">Vendor</span>
+                            </Link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#materialMenu" data-toggle="collapse" aria-expanded="true">
@@ -56,11 +64,37 @@
                             <ul class="collapse list-unstyled" id="settingsMenu">
                                 <!-- Settings Items Here -->
                                 <li class="nav-item">
-                                    <a class="nav-link">
-                                        <font-awesome-icon icon="fa-solid fa-gear" class="ml-4" />
-                                        <span class="ml-2 hide-menu">Vehicle Categories</span>
-                                    </a>
+                                    <Link :class="{ 'active': $page.url.startsWith('/material-category') }"
+                                    class="nav-link active-preloader" :href="route('materialCategory.index')">
+                                    <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
+                                        class="ml-2 hide-menu">Material Categories</span>
+                                    </Link>
                                 </li>
+                                <li class="nav-item">
+                                    <Link :class="{ 'active': $page.url.startsWith('/material-category') }"
+                                    class="nav-link active-preloader" :href="route('units.index')">
+                                    <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
+                                        class="ml-2 hide-menu">Vehicle Categories</span>
+                                    </Link>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a :class="{ 'active': $page.url.startsWith('/material-category') }"
+                                    class="nav-link active-preloader" href="/material-category">
+                                    <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
+                                        class="ml-2 hide-menu">Material Categories</span>
+                                    </a>
+                                </li> -->
+                                <!-- <li class="nav-item">
+                                    <a :class="{ 'active': $page.url.startsWith('/units') }"
+                                    class="nav-link active-preloader" href="/units">
+                                    <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
+                                        class="ml-2 hide-menu">Material Categories</span>
+                                    </a>
+                                </li> -->
+                                <!-- <li class="nav-item">
+                                    <a href="/material-category">Material Category (Test Link)</a>
+
+                                </li> -->
                                 <li class="nav-item">
                                     <a class="nav-link">
                                         <font-awesome-icon icon="fa-solid fa-warehouse" class="ml-4" />
@@ -79,7 +113,7 @@
 
 
 <script>
-import { Link } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/inertia-vue3';
 import isArray from 'lodash/isArray';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -131,9 +165,9 @@ export default {
 
         // this.getMaterialTypes();
 
-        if(!window.Laravel){
-            window.location.reload();
-        }
+        // if(!window.Laravel){
+        //     window.location.reload();
+        // }
     },
     methods: {
         isActive(route, path) {
@@ -162,4 +196,5 @@ export default {
 .navbar-vertical.navbar-expand-xs .navbar-collapse {
     margin-top: -50px;
 }
+
 </style>

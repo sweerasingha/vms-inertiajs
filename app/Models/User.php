@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Authorizable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,6 +56,12 @@ class User extends Authenticatable
         // This is just an example. You'll need to replace this with your actual logic
         // for fetching and returning the user's permissions.
         return [
+
+            'all_permissions' => $this->can('all_permissions'),
+            'can_add_permissions' => $this->can('add_permissions'),
+            'create_unit_measurements' => $this->can('create_unit_measurements'),
+            'can_read_unit_measurements' => $this->can('read_unit_measurements'),
+            'can_read_categories' => $this->can('read_categories'),
             'can_edit_posts' => $this->canEditPosts(),
             'can_delete_posts' => $this->canDeletePosts(),
             // Add other permissions as needed...
@@ -74,5 +81,9 @@ class User extends Authenticatable
         // Your logic here
         return false; // Example value
     }
+
+
+
+
 
 }

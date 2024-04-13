@@ -49,19 +49,19 @@ export default {
 
 <style lang="scss">
 body, html {
-    height: 100%; // Ensure the HTML and body take up full viewport height
+    height: 100%;
 }
 
 .app-container {
     display: flex;
     flex-direction: column;
-    height: 100vh; // Use 100vh to make sure the container takes up at least the full viewport height
+    height: 100vh;
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
-    flex: 1; // This allows the main content to expand and fill the available space
+    flex: 1;
 }
 
 body {

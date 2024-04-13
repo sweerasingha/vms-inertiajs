@@ -22,7 +22,7 @@
                                     </ol>
                                 </nav>
                             </div>
-                            <div class="col-lg-4 text-right" v-if="can('create_categories')">
+                            <div class="col-lg-4 text-right" v-if="$page.props.auth.user.permissions.all_permissions">
                                 <a href="javascript:void(0)" data-toggle="modal" data-target="#newCategoryModal"
                                     class="btn btn-sm btn-neutral float-end">
                                     <font-awesome-icon icon="fa-solid fa-circle-plus" />
@@ -64,14 +64,14 @@
                                                                         <i class="fa-solid fa-circle-plus text-ash">
                                                                         </i>
                                                                     </span> -->
-                                                                    <span @click.prevent="editCategory(category.id)" v-if="can('update_categories')"
+                                                                    <span @click.prevent="editCategory(category.id)" v-if="$page.props.auth.user.permissions.all_permissions"
                                                                         class="ms-2 ml-2">
                                                                         <i class="fa-solid fa-pencil text-ash"> </i>
                                                                     </span>
 
                                                                     <span @click.prevent="
                                                                         deleteSubCategory(category.id)
-                                                                        " v-if="can('delete_categories')" class="ms-2 ml-2">
+                                                                        " v-if="$page.props.auth.user.permissions.all_permissions" class="ms-2 ml-2">
                                                                         <i class="fa-solid fa-trash text-ash"> </i>
                                                                     </span>
                                                                 </span>
@@ -209,7 +209,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="text-right mt-2" v-if="can('create_categories')">
+                                        <div class="text-right mt-2" v-if="$page.props.auth.user.permissions.all_permissions">
                                             <div class="text-right mt-2">
                                                 <button type="submit"
                                                     class="btn btn-sm btn-round btn-outline--info btn-md mb-0">
@@ -334,7 +334,7 @@
                                                         validationErrors.name }}</small>
                                             </div>
                                         </div>
-                                        <div class="text-right mt-2" v-if="can('update_categories')">
+                                        <div class="text-right mt-2" v-if="$page.props.auth.user.permissions.all_permissions">
                                             <button type="submit"
                                                 class="btn btn-sm btn-round btn-outline--info btn-md mb-0">
                                                 <i class="fas fa-save"></i>
@@ -476,11 +476,14 @@ export default {
             // $("#warehouse_tree").jstree('open_all');
         },
         async getCategoriesLevel1() {
-            const categories = (await axios.get(route("materialCategory.level1.all")))
-                .data;
-            this.categories = categories;
-            this.treeInitialize();
-        },
+    try {
+        const response = await axios.get(route("materialCategory.level1.all"));
+        this.categories = response.data;
+    } catch (error) {
+        console.error("Error fetching categories:", error.response || error);
+        // Optionally handle the error in UI, e.g., show a notification or error message
+    }
+},
         async createCategory() {
             this.resetValidationErrors();
             try {

@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Material Categories">
+    <AppLayout title="Vehicle Categories">
         <template #header>
             <div class="header pb-6">
                 <div class="container-fluid">
@@ -7,7 +7,7 @@
                         <div class="row align-items-center mb-3 mt-3">
                             <div class="col-lg-8">
                                 <h6 class="h2 text-dark d-inline-block mb-0">
-                                    Material Category Management
+                                    Vehicle Category Management
                                 </h6>
                                 <nav aria-label="breadcrumb" class="d-none d-md-block">
                                     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
@@ -17,13 +17,13 @@
                                             </Link>
                                         </li>
                                         <li class="breadcrumb-item active breadcrumb-text" aria-current="page">
-                                            Material Categories
+                                            Vehicle Categories
                                         </li>
                                     </ol>
                                 </nav>
                             </div>
 
-                            <div class="col-lg-4 text-right" v-if="can('create_categories')">
+                            <div class="col-lg-4 text-right" v-if="page.props.auth.user.permissions.all_permissions">
                                 <a href="javascript:void(0)" data-toggle="modal" data-target="#newMaterialCategoryModal"
                                     class="btn btn-sm btn-outline-primary float-end">
                                     <font-awesome-icon icon="fa-solid fa-circle-plus" />
@@ -80,14 +80,14 @@
                                                 {{ materialCategory.name }}
                                             </td>
                                             <td :class="iconClassBody">
-                                                <a href="javascript:void(0)" v-if="can('update_categories')" @click.prevent="
+                                                <a href="javascript:void(0)" v-if="page.props.auth.user.permissions.all_permissions" @click.prevent="
                                                     editMaterialCategory(
                                                         materialCategory.id
                                                     )
                                                     " class="p-2 float-end">
                                                     <font-awesome-icon icon="fa-solid fa-pen" class="text-ash" />
                                                 </a>
-                                                <a href="javascript:void(0)" v-if="can('delete_categories')" @click.prevent="
+                                                <a href="javascript:void(0)" v-if="page.props.auth.user.permissions.all_permissions" @click.prevent="
                                                     deleteMaterialCategory(
                                                         materialCategory.id
                                                     )
@@ -221,7 +221,7 @@
                                                     }}</small>
                                             </div>
                                         </div>
-                                        <div class="text-right mt-2" v-if="can('create_categories')">
+                                        <div class="text-right mt-2" v-if="page.props.auth.user.permissions.all_permissions">
                                             <button type="submit" class="btn btn-round btn-outline--info btn-sm mb-0">
                                                 <font-awesome-icon icon="fa-solid fa-floppy-disk" />
                                                 CREATE
@@ -282,7 +282,7 @@
                                                     }}</small>
                                             </div>
                                         </div>
-                                        <div class="text-right mt-2" v-if="can('update_categories')">
+                                        <div class="text-right mt-2" v-if="page.props.auth.user.permissions.all_permissions">
                                             <button type="submit" class="btn btn-round btn-outline-primary btn-sm mb-0">
                                                 <font-awesome-icon icon="fa-solid fa-floppy-disk" />
                                                 UPDATE
@@ -377,6 +377,11 @@ export default {
             this.pagination = tableData.meta;
             this.$root.loader.finish();
         },
+        mounted() {
+  console.log(this.permissions); // Assuming permissions are stored in this.permissions
+  console.log(this.$page.props.auth.user.permissions); // This will show the permissions object in the console
+
+   },
 
         async createMaterialCategories() {
             this.resetValidationErrors();

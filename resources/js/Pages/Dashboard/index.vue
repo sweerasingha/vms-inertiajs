@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="iMake Dashboard">
+    <AppLayout title="VMS">
         <template #header>
             <div class="pb-6 header">
                 <div class="container-fluid">

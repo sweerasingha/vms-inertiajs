@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-        <Head :title="title ? title : 'IMake'">
+        <Head :title="title ? title : 'VMS'">
             <link rel="icon" type="image/svg+xml" href="/img/logo/logoN.png" />
             <slot name="meta_head" />
         </Head>
@@ -17,7 +17,8 @@
         </div>
         <Footer />
     </div>
-</template>
+</template>\
+'
 
 <script>
 import { Head, Link } from '@inertiajs/vue3';

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MaterialCategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitOfMeasureController;
+use App\Http\Controllers\VehicleCategoryController;
 use App\Http\Controllers\VendorBankAccountController;
 use App\Http\Controllers\VendorContactBookController;
 use App\Http\Controllers\VendorFinanceRecordController;
@@ -35,6 +36,22 @@ Route::prefix('material-category')->group(function () {
     Route::delete('/{category_id}/delete', [MaterialCategoryController::class, "delete"])->name('materialCategory.sub.delete');
     Route::get('/{category_id}/get', [MaterialCategoryController::class, "get"])->name('materialCategory.get');
     Route::post('/{category_id}/update', [MaterialCategoryController::class, "update"])->name('materialCategory.update');
+});
+
+//Vehicle-Categories
+Route::prefix('vehicle-category')->group(function () {
+    Route::get('/', [VehicleCategoryController::class, "index"])->name('vehicle-category.index');
+    Route::get('/all', [VehicleCategoryController::class, "all"])->name('vehicle-category.all');
+    Route::post('/store', [VehicleCategoryController::class, "store"])->name('vehicle-category.store');
+    Route::get('/{vehicle_id}/get', [VehicleCategoryController::class, "get"])->name('vehicle-category.get');
+    Route::delete('/{vehicle_id}/delete', [VehicleCategoryController::class, "delete"])->name('vehicle-category.delete');
+    Route::post('/{vehicle_id}/update', [VehicleCategoryController::class, "update"])->name('vehicle-category.update');
+    Route::get('/list', [VehicleCategoryController::class, "list"])->name('vehicle-category.list');
+    Route::post('/{vehicle_id}/changeStatus', [VehicleCategoryController::class, "changeStatus"])->name('vehicle-category.changeStatus');
+
+    Route::post('/{vehicle_id}/select/vehicle/delete', [VehicleCategoryController::class, 'deleteSelectedItems'])->name('vehicle-category.delete.selected');
+    Route::post('/select/vehicle/inactive', [VehicleCategoryController::class, 'inactiveSelectedItems'])->name('vehicle-category.inactive.selected');
+    Route::post('/select/vehicle/active', [VehicleCategoryController::class, 'activeSelectedItems'])->name('vehicle-category.active.selected');
 });
 
 

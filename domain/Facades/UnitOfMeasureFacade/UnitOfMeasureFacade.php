@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @link     https://cyberelysium.com
  * */
 class UnitOfMeasureFacade extends Facade
-{    
+{
     /**
      * getFacadeAccessor
      *

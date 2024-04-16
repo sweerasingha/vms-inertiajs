@@ -94,7 +94,7 @@
                                         </div>
                                         <div class="p-2 border icon_item">
                                             <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-wrench"
-                                                rotation="{270}" color="#505050" />
+                                                rotation="270" color="#505050" />
                                         </div>
                                         <div class="p-2 border icon_item" v-if="true">
                                             <a @click.prevent="activeSelectedItems(checkVendorItems)">
@@ -353,6 +353,7 @@ export default {
             iconClassHead: "text-center",
             iconClassBody: "text-center",
             rowClass: "cursor-pointer",
+            textClassHead: "some-default-class",
 
             search: null,
             page: 1,

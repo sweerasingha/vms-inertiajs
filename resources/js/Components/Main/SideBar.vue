@@ -64,19 +64,26 @@
                             <ul class="collapse list-unstyled" id="settingsMenu">
                                 <!-- Settings Items Here -->
                                 <li class="nav-item">
+                                    <Link :class="{ 'active': $page.url.startsWith('/vehicle-category') }"
+                                    class="nav-link active-preloader" :href="route('vehicle-category.index')">
+                                    <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
+                                        class="ml-2 hide-menu">Vehicle Categories</span>
+                                    </Link>
+                                </li>
+                                <!-- <li class="nav-item">
                                     <Link :class="{ 'active': $page.url.startsWith('/material-category') }"
                                     class="nav-link active-preloader" :href="route('materialCategory.index')">
                                     <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
                                         class="ml-2 hide-menu">Material Categories</span>
                                     </Link>
-                                </li>
-                                <li class="nav-item">
+                                </li> -->
+                                <!-- <li class="nav-item">
                                     <Link :class="{ 'active': $page.url.startsWith('/material-category') }"
                                     class="nav-link active-preloader" :href="route('units.index')">
                                     <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
                                         class="ml-2 hide-menu">Vehicle Categories</span>
                                     </Link>
-                                </li>
+                                </li> -->
                                 <!-- <li class="nav-item">
                                     <a :class="{ 'active': $page.url.startsWith('/material-category') }"
                                     class="nav-link active-preloader" href="/material-category">

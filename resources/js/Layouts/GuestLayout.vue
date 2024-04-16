@@ -4,17 +4,38 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
-            </Link>
+    <div class="min-h-screen justify-content-center pt-6 sm:pt-0 bg-gray-100 bg__login login_area">
+        <div class="row justify-content-center login-container">
+            <div class="col-md-4">
+                <Link href="/" class="d-flex align-items-center flex-column">
+                <ApplicationLogo class="w-50 h-50 fill-current text-gray-500 " />
+                </Link>
+            </div>
         </div>
-
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
-        >
-            <slot />
+        <div class="row justify-content-center login-container">
+            <div class="col-md-3">
+                <div class="w-full mt-4 mb-4 sm:max-w-md px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                    <slot />
+                </div>
+            </div>
         </div>
     </div>
 </template>
+
+<style lang="css">
+
+.login-container{
+    width: 100%;
+}
+.bg__login{
+    /* background: url('/bg/login_bg.png') no-repeat;
+    height: 100vh;
+    background-position: center; */
+}
+
+.login_area{
+    position: relative;
+    top: 100px;
+}
+
+</style>

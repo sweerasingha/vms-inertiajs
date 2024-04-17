@@ -25,19 +25,19 @@ Route::prefix('vehicle-category')->group(function () {
     Route::post('/select/vehicle/active', [VehicleCategoryController::class, 'activeSelectedItems'])->name('vehicle-category.active.selected');
 });
 
-// Country Registry
+// Country Register
 Route::prefix('country')->group(function () {
     Route::get('/', [CountryController::class, "index"])->name('country.index');
     Route::get('/all', [CountryController::class, "all"])->name('country.all');
     Route::post('/store', [CountryController::class, "store"])->name('country.store');
     Route::get('/{country_id}/get', [CountryController::class, "get"])->name('country.get');
-    Route::post('/{country_id}/update', [CountryController::class, "update"])->name('country.update');
     Route::delete('/{country_id}/delete', [CountryController::class, "delete"])->name('country.delete');
-
+    Route::post('/{country_id}/update', [CountryController::class, "update"])->name('country.update');
+    Route::get('/list', [CountryController::class, "list"])->name('country.list');
+    Route::post('/{country_id}/changeStatus', [CountryController::class, "changeStatus"])->name('country.changeStatus');
     Route::post('/{country_id}/select/country/delete', [CountryController::class, 'deleteSelectedItems'])->name('country.delete.selected');
     Route::post('/select/country/inactive', [CountryController::class, 'inactiveSelectedItems'])->name('country.inactive.selected');
     Route::post('/select/country/active', [CountryController::class, 'activeSelectedItems'])->name('country.active.selected');
-
 });
 
 require __DIR__ . '/auth.php';

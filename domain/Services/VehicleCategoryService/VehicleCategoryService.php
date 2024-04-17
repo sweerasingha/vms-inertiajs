@@ -104,11 +104,11 @@ class VehicleCategoryService
     {
         $ids = $data->input('ids');
 
-        $materials = VehicleCategory::whereIn('id', $ids)->get();
+        $vehicles = VehicleCategory::whereIn('id', $ids)->get();
 
-        foreach ($materials as $material) {
-            $material->status = 0;
-            $material->update();
+        foreach ($vehicles as $vehicle) {
+            $vehicle->status = 0;
+            $vehicle->update();
         }
 
         return response()->json([
@@ -119,11 +119,11 @@ class VehicleCategoryService
     {
         $ids = $data->input('ids');
 
-        $materials = VehicleCategory::whereIn('id', $ids)->get();
+        $vehicles = VehicleCategory::whereIn('id', $ids)->get();
 
-        foreach ($materials as $material) {
-            $material->status = 1;
-            $material->update();
+        foreach ($vehicles as $vehicle) {
+            $vehicle->status = 1;
+            $vehicle->update();
         }
 
         return response()->json([

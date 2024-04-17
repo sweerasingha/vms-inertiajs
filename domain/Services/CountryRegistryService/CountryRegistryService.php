@@ -70,11 +70,11 @@ class CountryRegistryService
      * Edit
      * merge data which retrieved from update function as an array
      *
-     * @param  country $country
+     * @param  Country $country
      * @param  array $data
      * @return void
      */
-    protected function edit(country $country, array $data)
+    protected function edit(Country $country, array $data)
     {
         return array_merge($country->toArray(), $data);
     }
@@ -83,21 +83,13 @@ class CountryRegistryService
      * Delete
      * delete specific data using country_id
      *
-     * @param  int   $country_id
+     * @param  int  $country_id
      * @return void
      */
     public function delete(int $country_id)
     {
         return $this->country->find($country_id)->delete();
     }
-
-    /**
-     * ChangeStatus
-     * change status of the relevant data row using country_id
-     *
-     * @param  int  $country_id
-     * @return void
-     */
     public function deleteSelected($data)
     {
         $ids = $data->input('ids');
@@ -112,11 +104,11 @@ class CountryRegistryService
     {
         $ids = $data->input('ids');
 
-        $materials = Country::whereIn('id', $ids)->get();
+        $countries = Country::whereIn('id', $ids)->get();
 
-        foreach ($materials as $material) {
-            $material->status = 0;
-            $material->update();
+        foreach ($countries as $country) {
+            $country->status = 0;
+            $country->update();
         }
 
         return response()->json([
@@ -127,15 +119,33 @@ class CountryRegistryService
     {
         $ids = $data->input('ids');
 
-        $materials = Country::whereIn('id', $ids)->get();
+        $countries = Country::whereIn('id', $ids)->get();
 
-        foreach ($materials as $material) {
-            $material->status = 1;
-            $material->update();
+        foreach ($countries as $country) {
+            $country->status = 1;
+            $country->update();
         }
 
         return response()->json([
             'success' => true,
+        ]);
+    }
+
+    public function changeStatus(int $country_id)
+    {
+        $country = $this->country->find($country_id);
+        if (!$country) {
+            return response()->json(['error' => 'country not found'], 404);
+        }
+
+        // Toggle status for example, or set based on some condition or input
+        $country->status = $country->status == 1 ? 0 : 1;
+        $country->save();
+https://www.duino.lk/product-category/sensors/proximity-sensors/
+        return response()->json([
+            'success' => true,
+            'message' => 'Status changed successfully',
+            'status' => $country->status
         ]);
     }
 }

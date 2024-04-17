@@ -1,341 +1,664 @@
 <template>
-    <AppLayout title="Country Management">
-        <template #header>
-            <div class="header pb-6">
-                <div class="container-fluid">
-                    <div class="header-body">
-                        <div class="row align-items-center mb-3 mt-3">
-                            <div class="col-lg-8">
-                                <h6 class="h2 text-dark d-inline-block mb-0">
-                                    Country Registry
-                                </h6>
-                                <nav aria-label="breadcrumb" class="d-none d-md-block">
-                                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                                        <li class="breadcrumb-item">
-                                            <Link :href="route('dashboard')">
-                                            <font-awesome-icon icon="fa-solid fa-house" color="#505050" />
-                                            </Link>
-                                        </li>
-                                        <li class="breadcrumb-item active breadcrumb-text" aria-current="page">
-                                            Country Registry
-                                        </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                            <div class="col-lg-4 text-right" v-if="$page.props.auth.user.permissions.all_permissions">
-                                <a href="javascript:void(0)" data-toggle="modal" data-target="#newCountryModal"
-                                    class="btn btn-sm btn-neutral float-end">
-                                    <font-awesome-icon icon="fa-solid fa-circle-plus" />
-                                    ADD NEW
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <AppLayout title="Country Register">
+    <template #header>
+      <div class="header pb-6">
+        <div class="container-fluid">
+          <div class="header-body">
+            <div class="row align-items-center mb-3 mt-3">
+              <div class="col-lg-8">
+                <h6 class="h2 text-dark d-inline-block mb-0">Country Register</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-block">
+                  <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item">
+                      <Link :href="route('dashboard')">
+                        <font-awesome-icon :icon="['fas', 'house']" color="#505050" />
+                      </Link>
+                    </li>
+                    <li
+                      class="breadcrumb-item active breadcrumb-text"
+                      aria-current="page"
+                    >
+                      Country Register
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+              <div
+                class="col-lg-4 text-right"
+                v-if="$page.props.auth.user.permissions.all_permissions"
+              >
+                <a
+                  href="javascript:void(0)"
+                  data-toggle="modal"
+                  data-target="#newCountryRegisterModal"
+                  class="btn btn-sm btn-neutral float-end"
+                >
+                  <font-awesome-icon :icon="['fas', 'circle-plus']" />
+                  ADD NEW
+                </a>
+              </div>
             </div>
-        </template>
-        <template #content>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card shadow">
-                        <div class="py-3 mx-3 text-sm card-body">
-                            <div class="flex">
-                                <div class="flex items-center text-muted">
-                                    Search:
-                                    <div class="inline-block ml-2">
-                                        <input type="text" class="form-control form-control-sm" v-model="search"
-                                            @keyup="getSearch" />
-                                    </div>
-                                </div>
-                                <div class="flex text-muted ml-auto mx-1">
-                                    <div class="inline-block mx-2">
-                                        <select class="form-control form-control-sm per-page-entry" :value="25"
-                                            v-model="pageCount" @change="perPageChange">
-                                            <option v-for="perPageCount in perPage" :key="perPageCount"
-                                                :value="perPageCount" v-text="perPageCount" />
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template #content>
+      <div class="card">
+        <div class="py-3 mx-3 text-sm card-body">
+          <div class="flex">
+            <div class="flex items-center text-muted">
+              Search:
+              <div class="inline-block ml-2">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  v-model="state.search"
+                  @keyup="getSearch"
+                />
+              </div>
+            </div>
+            <div class="flex text-muted ml-auto mx-1">
+              <div class="inline-block mx-2">
+                <select
+                  class="form-control form-control-sm per-page-entry"
+                  :value="25"
+                  v-model="state.pageCount"
+                  @change="perPageChange"
+                >
+                  <option
+                    v-for="perPageCount in state.perPage"
+                    :key="perPageCount"
+                    :value="perPageCount"
+                    v-text="perPageCount"
+                  />
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mx-4">
+          <div class="table-responsive">
+            <div class="d-flex flex-row mb-3 rounded">
+              <div class="left d-flex">
+                <div class="p-2 border icon_item">
+                  <font-awesome-icon
+                    class="icon_item-icon"
+                    :icon="['fas', 'clone']"
+                    color="#505050"
+                  />
+                </div>
+                <div class="p-2 border icon_item">
+                  <font-awesome-icon
+                    class="icon_item-icon"
+                    :icon="['fas', 'arrow-up-from-bracket']"
+                    color="#505050"
+                  />
+                </div>
+                <div class="p-2 border icon_item">
+                  <font-awesome-icon
+                    class="icon_item-icon"
+                    :icon="['fas', 'cloud-arrow-down']"
+                    color="#505050"
+                  />
+                </div>
+                <div class="p-2 border icon_item">
+                  <font-awesome-icon
+                    class="icon_item-icon"
+                    :icon="['fas', 'wrench']"
+                    :rotation="270"
+                    color="#505050"
+                  />
+                </div>
+                <div
+                  class="p-2 border icon_item"
+                  v-if="$page.props.auth.user.permissions.all_permissions"
+                >
+                  <a @click.prevent="activeSelectedItems(state.checkUOMItems)">
+                    <font-awesome-icon
+                      class="icon_item-icon"
+                      :icon="['fas', 'circle-check']"
+                      color="#0bd018"
+                    />
+                  </a>
+                </div>
+                <div
+                  class="p-2 border icon_item"
+                  v-if="$page.props.auth.user.permissions.all_permissions"
+                >
+                  <a @click.prevent="inactiveSelectedItems(state.checkUOMItems)">
+                    <font-awesome-icon
+                      class="icon_item-icon"
+                      :icon="['fas', 'circle-minus']"
+                      color="#eb0505"
+                    />
+                  </a>
+                </div>
+                <div
+                  class="p-2 border icon_item"
+                  v-if="
+                    $page.props.auth.user.permissions.all_permissions &&
+                    state.checkUOMItems.length > 0
+                  "
+                >
+                  <a
+                    href="javascript:void(0)"
+                    @click.prevent="deleteSelectedItems(state.checkUOMItems)"
+                  >
+                    <font-awesome-icon
+                      class="icon_item-icon"
+                      :icon="['fas', 'trash']"
+                      color="#eb0505"
+                    />
+                  </a>
+                </div>
+              </div>
+              <div class="right d-flex ml-auto">
+                <div class="p-2 border icon_item">
+                  <font-awesome-icon
+                    class="icon_item-icon"
+                    :icon="['fas', 'print']"
+                    color="#505050"
+                  />
+                </div>
+                <a
+                  href="javascript:void(0)"
+                  data-toggle="modal"
+                  data-target="#newCountryModal"
+                >
+                  <div class="p-2 border icon_item">
+                    <font-awesome-icon
+                      class="icon_item-icon"
+                      :icon="['fas', 'square-plus']"
+                      color="#306ed9"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="checkArea pl-3">
+                    <div class="form-check mb-4">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        @change="selectAll"
+                        v-if="state.countries.length > 0"
+                        :checked="state.checkUOMItems.length === state.countries.length"
+                        v-model="state.checkAllItems"
+                      />
+                    </div>
+                  </th>
+                  <th :class="state.iconClassHead">Status</th>
+                  <th class="text-start">Code</th>
+                  <th class="text-start">Name</th>
+                  <th class="text-right"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="country in state.countries"
+                  :key="country.id"
+                  :class="state.rowClass"
+                >
+                  <td class="pl-3">
+                    <div class="form-check mb-4">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        v-model="state.checkUOMItems"
+                        v-bind:value="country"
+                        :id="'checkbox-' + country.id"
+                      />
+                    </div>
+                  </td>
+                  <td :class="state.iconClassBody">
+                    <span
+                      v-if="country.status == 1"
+                      class="badge bg-success text-white fw-bold ml-3"
+                      >Active</span
+                    >
+                    <span
+                      v-if="country.status == 0"
+                      class="badge bg-warning text-white fw-bold ml-3"
+                      >Deactive</span
+                    >
+                  </td>
+                  <td class="text-start">
+                    {{ country.code }}
+                  </td>
+                  <td class="text-start">
+                    {{ country.name }}
+                  </td>
+                  <td class="text-right">
+                    <a
+                      href="javascript:void(0)"
+                      v-if="$page.props.auth.user.permissions.all_permissions"
+                      class="p-2"
+                      @click.prevent="editCountry(country.id)"
+                    >
+                      <i class="fas fa-pencil text-ash" aria-hidden="true"></i>
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      v-if="$page.props.auth.user.permissions.all_permissions"
+                      @click.prevent="deleteCountry(country.id)"
+                      class="p-2"
+                    >
+                      <i class="fas fa-trash text-ash" aria-hidden="true"></i>
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      class="p-2"
+                      @click.prevent="changeCountryState(country.id)"
+                    >
+                      <i class="fas fa-times text-ash" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-                        <div class="row mx-4">
-                            <div class="table-responsive">
-                                <div class="d-flex flex-row mb-3 rounded">
-                                    <div class="left d-flex">
-                                        <div class="p-2 border icon_item">
-                                            <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-clone"
-                                                color="#505050" />
-                                        </div>
-                                        <div class="p-2 border icon_item">
-                                            <font-awesome-icon class="icon_item-icon"
-                                                icon="fa-solid fa-arrow-up-from-bracket" color="#505050" />
-                                        </div>
-                                        <div class="p-2 border icon_item">
-                                            <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-cloud-arrow-down"
-                                                color="#505050" />
-                                        </div>
-                                        <div class="p-2 border icon_item">
-                                            <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-wrench"
-                                                rotation="{270}" color="#505050" />
-                                        </div>
-                                        <div class="p-2 border icon_item" v-if="$page.props.auth.user.permissions.all_permissions">
-                                            <a @click.prevent="activeSelectedItems(checkCountryItems)">
-                                                <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-circle-check"
-                                                    color="#0bd018" />
-                                            </a>
-                                        </div>
-                                        <div class="p-2 border icon_item" v-if="$page.props.auth.user.permissions.all_permissions">
-                                            <a @click.prevent="
-                                                inactiveSelectedItems(checkCountryItems)
-                                                ">
-                                                <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-circle-minus"
-                                                    color="#eb0505" />
-                                            </a>
-                                        </div>
-                                        <div class="p-2 border icon_item" v-if="this.checkCountryItems.length > 0 && $page.props.auth.user.permissions.all_permissions">
-                                            <a href="javascript:void(0)"
-                                                @click.prevent="deleteSelectedItems(checkCountryItems)">
-                                                <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-trash"
-                                                    color="#eb0505" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="right d-flex ml-auto">
-                                        <div class="p-2 border icon_item">
-                                            <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-print"
-                                                color="#505050" />
-                                        </div>
-                                        <!-- <a href="javascript:void(0)" data-toggle="modal" data-target="#newMaterialModal">
-                                            <div class="p-2 border icon_item">
-                                                <font-awesome-icon class="icon_item-icon" icon="fa-solid fa-square-plus"
-                                                    color="#306ed9" />
-                                            </div>
-                                        </a> -->
-                                    </div>
-                                </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="checkArea">
-                                                <div class="form-check mb-4">
-                                                    <input class="form-check-input" type="checkbox" @click="selectAll"
-                                                        v-if="this.countries.length > 0"
-                                                        :checked="this.checkAllItems.length==this.checkCountryItems.length"
-                                                        v-model="checkAllItems" />
-                                                </div>
-                                            </th>
-                                            <th class="text-center">Status</th>
-                                            <th :class="textClassHead">Code</th>
-                                            <th :class="textClassHead">Name</th>
-                                            <th :class="textClassHead"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="country in countries" :key="country.id" :class="rowClass">
-                                            <td>
-                                                <div class="form-check mb-4">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        v-model="checkCountryItems" v-bind:value="country"
-                                                        v-bind:id="country.id" />
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <span v-if="country.status == 1"
-                                                    class="badge bg-success text-white fw-bold">Active</span>
-                                                <span v-if="country.status == 0"
-                                                    class="badge bg-warning text-white fw-bold">Deactive</span>
-                                            </td>
-                                            <td :class="textClassBody">
-                                                {{ country.code }}
-                                            </td>
-                                            <td :class="textClassBody">
-                                                {{ country.name }}
-                                            </td>
-                                            <td :class="iconClassBody">
-                                                <a href="javascript:void(0)" v-if="$page.props.auth.user.permissions.all_permissions"
-                                                    @click.prevent="editCountry(country.id)" class="p-2 float-end">
-                                                    <font-awesome-icon icon="fa-solid fa-pen" class="text-ash" />
-                                                </a>
-                                                <a href="javascript:void(0)" v-if="$page.props.auth.user.permissions.all_permissions"
-                                                    @click.prevent="deleteCountry(country.id)" class="p-2 float-end">
-                                                    <font-awesome-icon icon="fa-solid fa-trash" class="text-ash" />
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+        <div class="flex mt-1 card-footer table-footer align-items-center">
+          <div class="col-sm-12 col-md-6">
+            <div
+              class="dataTables_info"
+              id="DataTables_Table_0_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ state.pagination.from }} to {{ state.pagination.to }} of
+              {{ state.pagination.total }} entries
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div
+              class="dataTables_paginate paging_simple_numbers"
+              id="DataTables_Table_0_paginate"
+            >
+              <nav aria-label="Page navigation" style="float: right">
+                <ul class="pagination">
+                  <li
+                    class="page-item"
+                    :class="state.pagination.current_page == 1 ? 'disabled' : ''"
+                  >
+                    <a
+                      class="page-link"
+                      href="javascript:void(0)"
+                      @click="setPage(state.pagination.current_page - 1)"
+                    >
+                      <i class="fa-solid fa-angles-left"></i>
+                    </a>
+                  </li>
+                  <template v-for="(page, index) in state.pagination.last_page">
+                    <template
+                      v-if="
+                        page == 1 ||
+                        page == state.pagination.last_page ||
+                        Math.abs(page - state.pagination.current_page) < 5
+                      "
+                    >
+                      <li
+                        class="page-item"
+                        :key="index"
+                        :class="state.pagination.current_page == page ? 'active' : ''"
+                      >
+                        <a class="page-link" @click="setPage(page)">{{ page }}</a>
+                      </li>
+                    </template>
+                  </template>
+                  <li
+                    class="page-item"
+                    :class="
+                      state.pagination.current_page == state.pagination.last_page
+                        ? 'disabled'
+                        : ''
+                    "
+                  >
+                    <a
+                      class="page-link"
+                      href="javascript:void(0)"
+                      @click="setPage(state.pagination.current_page + 1)"
+                    >
+                      <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template #modals>
+      <div
+        class="modal fade"
+        id="newCountryRegisterModal"
+        data-backdrop="static"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="newCountryRegisterModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5
+                class="modal-title font-weight-bolder breadcrumb-text text-gradient"
+                id="add_brandLabel"
+              >
+                New country
+              </h5>
+              <button
+                type="button"
+                class="close btn"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">
+                  <font-awesome-icon :icon="['fas', 'xmark']" />
+                </span>
+              </button>
+            </div>
+            <div class="modal-body p-2">
+              <div class="card-plain">
+                <div class="card-body m-3">
+                  <form
+                    role="form text-left"
+                    @submit.prevent="createCountry"
+                    enctype="multipart/form-data"
+                  >
+                    <div class="row mb-1">
+                      <div for="name" class="col-md-2 col-form-label col-form-label">
+                        NAME
+                      </div>
+                      <div class="col-md-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="name"
+                          id="name"
+                          v-model="state.country.name"
+                          placeholder="Enter Name"
+                          required
+                        />
 
-                        <div class="flex mt-1 px-3 mx-1 card-footer table-footer align-items-center">
-                            <div class="col-sm-12 col-md-6 p-0">
-                                <div class="dataTables_info column__left___padding" id="DataTables_Table_0_info"
-                                    role="status" aria-live="polite">
-                                    Showing {{ pagination.from }} to {{ pagination.to }} of
-                                    {{ pagination.total }} entries
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 p-0">
-                                <div class="dataTables_paginate paging_simple_numbers column__right___padding"
-                                    id="DataTables_Table_0_paginate">
-                                    <nav aria-label="Page navigation" style="float: right">
-                                        <ul class="pagination">
-                                            <li class="page-item" :class="pagination.current_page == 1 ? 'disabled' : ''">
-                                                <a class="page-link" href="javascript:void(0)"
-                                                    @click="setPage(pagination.current_page - 1)">
-                                                    <i class="fa-solid fa-angles-left"></i>
-                                                </a>
-                                            </li>
-                                            <template v-for="(page, index) in pagination.last_page">
-                                                <template v-if="page == 1 ||
-                                                    page == pagination.last_page ||
-                                                    Math.abs(page - pagination.current_page) < 5
-                                                    ">
-                                                    <li class="page-item" :key="index" :class="pagination.current_page == page ? 'active' : ''
-                                                        ">
-                                                        <a class="page-link" @click="setPage(page)">{{
-                                                            page
-                                                        }}</a>
-                                                    </li>
-                                                </template>
-                                            </template>
-                                            <li class="page-item" :class="pagination.current_page == pagination.last_page
-                                                    ? 'disabled'
-                                                    : ''
-                                                ">
-                                                <a class="page-link" href="javascript:void(0)"
-                                                    @click="setPage(pagination.current_page + 1)">
-                                                    <i class="fa-solid fa-angles-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
+                        <small
+                          v-if="validationErrors.name"
+                          id="msg_code"
+                          class="text-danger form-text text-error-msg error"
+                          >{{ validationErrors.name }}</small
+                        >
+                      </div>
                     </div>
-                </div>
-            </div>
-        </template>
-        <template #modals>
-            <div class="modal fade" id="newCountryModal" data-backdrop="static" tabindex="-1" role="dialog"
-                aria-labelledby="newCountryModal" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-weight-bolder breadcrumb-text text-gradient" id="add_brandLabel">
-                                New Country
-                            </h5>
-                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">
-                                    <font-awesome-icon icon="fa-solid fa-xmark" />
-                                </span>
-                            </button>
-                        </div>
-                        <div class="modal-body p-0">
-                            <div class="card-plain">
-                                <div class="card-body m-2">
-                                    <form role="form text-left" @submit.prevent="createCountries"
-                                        enctype="multipart/form-data">
-                                        <div class="row mb-1">
-                                            <div for="code" class="col-md-3 col-form-label">CODE</div>
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="code"
-                                                    id="code" v-model="country.code" placeholder="Code" required />
-                                                <small v-if="validationErrors.code" id="msg_code"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                        validationErrors.code }}</small>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div for="name" class="col-md-3 col-form-label">NAME</div>
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="name"
-                                                    id="name" v-model="country.name" placeholder="Name" required />
-                                                <small v-if="validationErrors.name" id="msg_name"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                        validationErrors.name }}</small>
-                                            </div>
-                                        </div>
-                                        <div class="text-right mt-2" v-if="$page.props.auth.user.permissions.all_permissions">
-                                            <button type="submit" class="btn btn-round btn-outline--info btn-sm mb-0">
-                                                <font-awesome-icon icon="fa-solid fa-floppy-disk" />
-                                                CREATE
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row mb-1">
+                      <div for="name" class="col-md-2 col-form-label col-form-label">
+                        Code
+                      </div>
+                      <div class="col-md-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="code"
+                          id="code"
+                          v-model="state.country.code"
+                          placeholder="Enter Code"
+                          required
+                        />
+                        <small
+                          v-if="validationErrors.name"
+                          id="msg_code"
+                          class="text-danger form-text text-error-msg error"
+                          >{{ validationErrors.name }}</small
+                        >
+                      </div>
                     </div>
+                    <div
+                      class="text-right mt-2"
+                      v-if="$page.props.auth.user.permissions.all_permissions"
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-round btn-outline--info btn-md mb-0"
+                      >
+                        <i class="fas fa-save"></i>
+                        CREATE
+                      </button>
+                    </div>
+                  </form>
                 </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="modal fade" id="editCountryModal" data-backdrop="static" tabindex="-1" role="dialog"
-                aria-labelledby="editCountryModal" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-weight-bolder breadcrumb-text text-gradient" id="add_brandLabel">
-                                Edit Country
-                            </h5>
-                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">
-                                    <font-awesome-icon icon="fa-solid fa-xmark" />
-                                </span>
-                            </button>
-                        </div>
-                        <div class="modal-body p-0">
-                            <div class="card-plain">
-                                <div class="card-body m-2">
-                                    <form role="form text-left" @submit.prevent="updateCountry"
-                                        enctype="multipart/form-data">
-                                        <div class="row mb-1">
-                                            <div for="code" class="col-md-3 col-form-label">CODE</div>
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="code"
-                                                    id="code" v-model="edit_country.code" placeholder="Code" required />
-                                                <small v-if="validationErrors.code" id="msg_code"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                        validationErrors.code }}</small>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div for="name" class="col-md-3 col-form-label">NAME</div>
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="name"
-                                                    id="name" v-model="edit_country.name" placeholder="Name" required />
-                                                <small v-if="validationErrors.name" id="msg_name"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                        validationErrors.name }}</small>
-                                            </div>
-                                        </div>
-                                        <div class="text-right mt-2" v-if="$page.props.auth.user.permissions.all_permissions">
-                                            <button type="submit" class="btn btn-round btn-outline-primary btn-sm mb-0">
-                                                <font-awesome-icon icon="fa-solid fa-floppy-disk" />
-                                                UPDATE
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div
+        class="modal fade"
+        id="editCountryCategoryModal"
+        data-backdrop="static"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="editCountryCategoryModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5
+                class="modal-title font-weight-bolder breadcrumb-text text-gradient"
+                id="add_brandLabel"
+              >
+                Edit country
+              </h5>
+              <button
+                type="button"
+                class="close btn"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">
+                  <font-awesome-icon :icon="['fas', 'xmark']" />
+                </span>
+              </button>
             </div>
-        </template>
-    </AppLayout>
+            <div class="modal-body p-2">
+              <div class="card-plain">
+                <div class="card-body m-3">
+                  <form
+                    role="form text-left"
+                    @submit.prevent="updateCountry"
+                    enctype="multipart/form-data"
+                  >
+                    <div class="row mb-1">
+                      <div for="name" class="col-md-2 col-form-label col-form-label">
+                        NAME
+                      </div>
+                      <div class="col-md-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="name"
+                          id="name"
+                          v-model="state.country_register_edit.name"
+                          placeholder="Enter Name"
+                          required
+                        />
+                        <small
+                          v-if="validationErrors.message"
+                          id="msg_code"
+                          class="text-danger form-text text-error-msg error"
+                          >{{ validationErrors.message }}</small
+                        >
+                      </div>
+                      <div for="name" class="col-md-2 col-form-label col-form-label">
+                        CODE
+                      </div>
+                      <div class="col-md-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="code"
+                          id="code"
+                          v-model="state.country_register_edit.code"
+                          placeholder="Enter Code"
+                          required
+                        />
+                        <small
+                          v-if="validationErrors.message"
+                          id="msg_code"
+                          class="text-danger form-text text-error-msg error"
+                          >{{ validationErrors.message }}</small
+                        >
+                      </div>
+                    </div>
+
+                    <div
+                      class="text-right mt-4"
+                      v-if="$page.props.auth.user.permissions.all_permissions"
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-round custom-button btn-sm mb-0"
+                      >
+                        <font-awesome-icon :icon="['fas', 'floppy-disk']" />
+                        UPDATE
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade bd-example-modal-lg"
+        id="editCountryCategoryModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5
+                class="modal-title font-weight-bolder breadcrumb-text text-gradient"
+                id="exampleModalLabel"
+              >
+                Edit country
+              </h5>
+              <button
+                type="button"
+                class="close btn"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">
+                  <font-awesome-icon :icon="['fas', 'xmark']" />
+                </span>
+              </button>
+            </div>
+            <div class="modal-body p-0">
+              <div class="card card-plain">
+                <div class="card-body">
+                  <form
+                    role="form text-left"
+                    @submit.prevent="updateCountry"
+                    method="POST"
+                    enctype="multipart/form-data"
+                  >
+                    <div class="row mb-1">
+                      <div for="name" class="col-md-3 col-form-label">NAME</div>
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          v-model="state.country_register_edit.name"
+                          class="form-control form-control-sm"
+                          name="name"
+                          id="name"
+                          placeholder="Enter Name"
+                          required
+                        />
+                        <small
+                          v-if="validationErrors.message"
+                          id="msg_name"
+                          class="text-danger form-text text-error-msg error"
+                          >{{ validationErrors.message }}</small
+                        >
+                      </div>
+                    </div>
+                    <div class="text-right mt-2">
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-round btn-outline--info btn-md mb-0"
+                      >
+                        <i class="fas fa-save"></i>
+                        UPDATE
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </AppLayout>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, onMounted, watch } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faHouse,
+  faFloppyDisk,
+  faCirclePlus,
+  faClone,
+  faCloudArrowDown,
+  faSquarePlus,
+  faPrint,
+  faWrench,
+  faCircleCheck,
+  faCircleMinus,
+  faTrash,
+  faArrowUpFromBracket,
+  faXmark,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
+
+// Reactive state management with the Composition API
+const state = reactive({
+  textClassHead: "text-start text-uppercase",
+  textClassBody: "text-start",
+  iconClassHead: "text-center",
+  iconClassBody: "text-center",
+  rowClass: "cursor-pointer",
+  search: null,
+  page: 1,
+  perPage: [25, 50, 100],
+  pageCount: 25,
+  pagination: {},
+  country: {},
+  country_register_edit: {},
+  countries: [],
+  checkUOMItems: [],
+  checkAllItems: false,
+});
+
+onMounted(async () => {
+  library.add(
     faHouse,
     faFloppyDisk,
     faCirclePlus,
@@ -349,264 +672,239 @@ import {
     faTrash,
     faArrowUpFromBracket,
     faXmark,
-    faPen,
-} from "@fortawesome/free-solid-svg-icons";
+    faPenToSquare
+  );
+  await getCountries();
+});
 
-export default {
-    components: {
-        AppLayout,
-        Link,
-        library,
+watch(
+  () => state.checkAllItems,
+  (newVal) => {
+    selectAll();
+  }
+);
+const getCountries = async () => {
+  const response = await axios.get(route("country.all"));
+  state.countries = response.data.data;
+  state.pagination = response.data.meta;
+};
+
+const setPage = async (page) => {
+  state.page = page;
+  await reload();
+};
+
+const getSearch = async () => {
+  await reload();
+};
+
+const perPageChange = async () => {
+  await reload();
+};
+
+const reload = async () => {
+  const tableData = await axios.get(route("country.all"), {
+    params: {
+      page: state.page,
+      per_page: state.pageCount,
+      "filter[search]": state.search,
     },
-    data() {
-        return {
-            textClassHead: "text-start text-uppercase",
-            textClassBody: "text-start",
-            iconClassHead: "text-right",
-            iconClassBody: "text-right",
-            rowClass: "cursor-pointer",
+  });
+  state.countries = tableData.data.data;
+  state.pagination = tableData.data.meta;
+};
 
-            search: null,
-            page: 1,
-            perPage: [25, 50, 100],
-            pageCount: 25,
-            pagination: {},
-            country: {},
-            edit_country: {},
+const resetValidationErrors = () => {
+  state.validationErrors = {};
+};
+function convertValidationNotification(error) {
+  if (error.response && error.response.data && error.response.data.errors) {
+    state.validationErrors = error.response.data.errors;
+  } else {
+    console.error("Unexpected error", error);
+  }
+}
+const createCountry = async () => {
+  resetValidationErrors();
+  try {
+    await axios.post(route("country.store"), state.country);
+    reload();
+    $("#newCountryRegisterModal").modal("hide");
+    state.country = {};
+    Swal.fire({
+      title: "Success",
+      text: "Country created successfully",
+      icon: "success",
+    });
+  } catch (error) {
+    convertValidationNotification(error);
+  }
+};
 
-            countries: [],
-            checkCountryItems: [],
-            checkAllItems: false,
-        };
-    },
-    beforeMount() {
-        this.getCountries();
-        library.add(faHouse);
-        library.add(faFloppyDisk);
-        library.add(faCirclePlus);
-        library.add(faClone);
-        library.add(faCloudArrowDown);
-        library.add(faSquarePlus);
-        library.add(faPrint);
-        library.add(faArrowUpFromBracket);
-        library.add(faWrench);
-        library.add(faCircleCheck);
-        library.add(faCircleMinus);
-        library.add(faTrash);
-        library.add(faXmark);
-        library.add(faPen);
-    },
-    watch: {
-        "country.code": function (val) {
-            val ? (this.country.code = val.toUpperCase()) : "";
-        },
-        "edit_country.code": function (val) {
-            val ? (this.edit_country.code = val.toUpperCase()) : "";
-        },
+const changeCountryState = async (id) => {
+  try {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to change status!",
+      showCancelButton: true,
+      confirmButtonColor: "#C00202",
+      cancelButtonColor: "#6CA925",
+      confirmButtonText: "Yes, change it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`/country/${id}/changeStatus`)
+          .then((response) => {
+            reload();
+            Swal.fire("Changed!", `Status has been changed.`, "success");
+          })
+          .catch((error) => {
+            console.error("Error changing status:", error);
+            Swal.fire("Error!", `Failed to change status.`, "error");
+          });
+      }
+    });
+  } catch (error) {
+    console.error("Error in changeCountryState method:", error);
+  }
+};
 
-        checkAllItems(value) {
-            this.countries.forEach((item, index) => {
-                if (index !== 0) {
-                    item.selected = value;
-                }
-            });
-            if (this.checkCountryItems.length == this.countries.length) {
-                this.checkCountryItems = [];
-            } else {
-                this.checkCountryItems = this.countries;
-            }
-        },
-        checkCountryItems(value) {
-            if (this.checkCountryItems.length != this.countries.length) {
-                this.checkAllItems = false;
-            }
-        },
-    },
-    methods: {
-        async setPage(page) {
-            this.page = page;
-            this.reload();
-        },
-        async getSearch() {
-            this.page = 1;
-            this.reload();
-        },
-        async perPageChange() {
-            this.reload();
-        },
-        async reload() {
-            this.$root.loader.start();
-            const tableData = (
-                await axios.get(route("country.all"), {
-                    params: {
-                        page: this.page,
-                        per_page: this.pageCount,
-                        "filter[search]": this.search,
-                    },
-                })
-            ).data;
+const deleteCountry = async (id) => {
+  try {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#C00202",
+      cancelButtonColor: "#6CA925",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(route("country.delete", id));
+        reload();
+        Swal.fire("Deleted!", `Record has been deleted.`, "success");
+      }
+    });
+  } catch (error) {
+    convertValidationNotification(error);
+  }
+};
 
-            this.countries = tableData.data;
-            this.pagination = tableData.meta;
-            this.$root.loader.finish();
-        },
+const editCountry = async (id) => {
+  resetValidationErrors();
+  try {
+    const country = (await axios.get(route("country.get", id))).data;
+    state.country_register_edit = country.data;
+    $("#editCountryCategoryModal").modal("show");
+  } catch (error) {
+    convertValidationError(error);
+  }
+};
 
-        async createCountries() {
-            this.resetValidationErrors();
-            try {
-                await axios.post(route("country.store"), this.country);
-                this.reload();
-                $("#newCountryModal").modal("hide");
-                this.country = {};
-                this.$root.notify.success({
-                    title: "Success",
-                    message: "Country created successfully",
-                });
-            } catch (error) {
-                this.convertValidationNotification(error);
-            }
-        },
+const updateCountry = async () => {
+  resetValidationErrors();
+  try {
+    await axios.post(
+      route("country.update", state.country_register_edit.id),
+      state.country_register_edit
+    );
+    reload();
+    $("#editCountryCategoryModal").modal("hide");
+    state.country_register_edit = {};
+    Swal.fire({
+      title: "Success",
+      text: "Country updated successfully",
+      icon: "success",
+    });
+  } catch (error) {
+    convertValidationNotification(error);
+  }
+};
 
-        async getCountries() {
-            this.$nextTick(() => {
-                this.$root.loader.start();
-            });
-            const tableData = (await axios.get(route("country.all"))).data;
-            this.countries = tableData.data;
-            this.pagination = tableData.meta;
-            this.$nextTick(() => {
-                this.$root.loader.finish();
-            });
-        },
+function selectAll() {
+  if (state.checkAllItems) {
+    state.checkUOMItems = [...state.countries];
+  } else {
+    state.checkUOMItems = [];
+  }
+}
 
-        async deleteCountry(id) {
-            try {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#C00202", // Green
-                    cancelButtonColor: "#6CA925", // Secondary Color
-                    confirmButtonText: "Yes, delete it!",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        axios.delete(route("country.delete", id)).then((response) => {
-                            this.reload();
-                        });
-                    }
-                });
-            } catch (error) {
-                this.convertValidationNotification(error);
-            }
-        },
-        async editCountry(id) {
-            this.resetValidationErrors();
-            try {
-                const country = (await axios.get(route("country.get", id))).data;
-                this.edit_country = country.data;
-                $("#editCountryModal").modal("show");
-            } catch (error) {
-                this.convertValidationError(error);
-            }
-        },
-        async updateCountry() {
-            this.resetValidationErrors();
-            try {
-                await axios.post(
-                    route("country.update", this.edit_country.id),
-                    this.edit_country
-                );
-                this.reload();
-                $("#editCountryModal").modal("hide");
-                this.edit_country = {};
-                this.$root.notify.success({
-                    title: "Success",
-                    message: "Country updated successfully",
-                });
-            } catch (error) {
-                this.convertValidationNotification(error);
-            }
-        },
-        selectAll: function (event) {
-            if (event.target.checked == false) {
-                this.checkCountryItems = [];
-            } else {
-                this.countries.forEach((country) => {
-                    this.checkCountryItems.push(country.id);
-                });
-            }
-        },
+const deleteSelectedItems = async (checkUOMItems) => {
+  console.log("Attempting to delete items:", checkUOMItems);
+  try {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#C00202",
+      cancelButtonColor: "#6CA925",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const ids = state.checkUOMItems.map((countries) => countries.id);
+        axios
+          .post(route("country.delete.selected", checkUOMItems), { ids })
+          .then((response) => {
+            reload();
+          });
+      }
+    });
+  } catch (error) {
+    convertValidationNotification(error);
+  }
+};
 
-        async deleteSelectedItems(checkCountryItems) {
-            this.$root.loader.start();
-            try {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#C00202", // Green
-                    cancelButtonColor: "#6CA925", // Secondary Color
-                    confirmButtonText: "Yes, delete it!",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const ids = this.checkCountryItems.map((countries) => countries.id);
-                        axios
-                            .post(route("country.delete.selected", checkCountryItems), {
-                                ids,
-                            })
-                            .then((response) => {
-                                this.reload();
-                                // console.log('Items deleted successfully.')
-                                // Update the list of items to reflect the changes
-                            });
-                        // Swal.fire(
-                        //     "Deleted!",
-                        //     `Contry has been deleted.`,
-                        //     "success"
-                        // );
-                    }
-                });
-                this.$root.loader.finish();
-            } catch (error) {
-                this.convertValidationNotification(error);
-            }
-        },
-        async inactiveSelectedItems(checkCountryItems) {
-            this.$nextTick(() => {
-                this.$root.loader.start();
-            });
-            const ids = this.checkCountryItems.map((country) => country.id);
-            axios
-                .post(route("country.inactive.selected"), { ids })
-                .then((response) => {
-                    this.checkCountryItems = [];
-                    this.reload();
-                });
-            this.$nextTick(() => {
-                this.$root.loader.finish();
-            });
-        },
-        async activeSelectedItems(checkCountryItems) {
-            this.$nextTick(() => {
-                this.$root.loader.start();
-            });
-            const ids = this.checkCountryItems.map((country) => country.id);
-            axios.post(route("country.active.selected"), { ids }).then((response) => {
-                this.checkCountryItems = [];
-                this.reload();
-            });
-            this.$nextTick(() => {
-                this.$root.loader.finish();
-            });
-        },
-    },
+const inactiveSelectedItems = async (checkUOMItems) => {
+  const ids = state.checkUOMItems.map((country) => country.id);
+  axios.post(route("country.inactive.selected"), { ids }).then((response) => {
+    state.checkUOMItems = [];
+    reload();
+  });
+};
+
+const activeSelectedItems = async (checkUOMItems) => {
+  const ids = state.checkUOMItems.map((country) => country.id);
+  axios.post(route("country.active.selected"), { ids }).then((response) => {
+    state.checkUOMItems = [];
+    reload();
+  });
 };
 </script>
 
 <style lang="scss" scoped>
+tr:hover {
+  background: rgba(157, 157, 157, 0.357);
+  cursor: pointer;
+}
+
+.table > :not(caption) > * > * {
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+  padding-left: 0.5rem;
+}
+
+.table thead th {
+  padding: 0.45rem 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  border-bottom: 1px solid #e9ecef;
+  text-align: left;
+}
+
 .breadcrumb-text {
-    color: #6343e9 !important;
+  color: #6343e9 !important;
+}
+
+.custom-button {
+  background-color: #ffffff;
+  border-color: #6343e9;
+  color: #6343e9 !important;
+}
+
+.custom-button:hover {
+  background-color: #6343e9;
+  color: #ffffff !important;
 }
 </style>

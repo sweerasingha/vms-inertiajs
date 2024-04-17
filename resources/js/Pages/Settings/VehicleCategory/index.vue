@@ -678,9 +678,10 @@ const createvehicle = async () => {
     reload();
     $("#newVehicleCategoryModal").modal("hide");
     state.vehicle = {};
-    $root.notify.success({
+    Swal.fire({
       title: "Success",
-      message: "vehicle created successfully",
+      text: "Vehicle Category created successfully",
+      icon: "success",
     });
   } catch (error) {
     convertValidationNotification(error);
@@ -758,9 +759,10 @@ const updateVehicleCategory = async () => {
     reload();
     $("#editVehicleCategoryModal").modal("hide");
     state.vehicle_category_edit = {};
-    $root.notify.success({
+    Swal.fire({
       title: "Success",
-      message: "vehicle updated successfully",
+      text: "Vehicle updated successfully",
+      icon: "success",
     });
   } catch (error) {
     convertValidationNotification(error);

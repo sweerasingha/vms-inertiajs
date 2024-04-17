@@ -33,7 +33,6 @@
               <Link
                 :class="{ active: isActive('/vendors') }"
                 class="nav-link active-preloader"
-                :href="route('vendors.index')"
               >
                 <font-awesome-icon icon="fa-solid fa-building-user" />
                 <span class="ml-2 nav-link-text font-weight-400">Vehicles</span>
@@ -74,7 +73,7 @@
                   >
                     <font-awesome-icon icon="fa-solid fa-folder " class="ml-4" /><span
                       class="ml-2 hide-menu"
-                      >Country</span
+                      >Country Register</span
                     >
                   </Link>
                 </li>

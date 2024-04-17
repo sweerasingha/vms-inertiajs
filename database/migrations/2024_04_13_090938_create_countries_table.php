@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->default('');
             $table->string('name');
             $table->bigInteger('status')->default(1);
             $table->softDeletes();

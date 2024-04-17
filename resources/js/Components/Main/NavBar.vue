@@ -5,11 +5,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Search form -->
                 <!-- Navbar links -->
-                <ul class="navbar-nav align-items-center  ml-md-auto ">
+                <ul class="navbar-nav align-items-center ml-md-auto">
                     <li class="nav-item d-xl-none">
                         <!-- Sidenav toggler -->
-                        <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin"
-                            data-target="#sidenav-main">
+                        <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main">
                             <div class="sidenav-toggler-inner">
                                 <i class="sidenav-toggler-line"></i>
                                 <i class="sidenav-toggler-line"></i>
@@ -18,26 +17,24 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="navbar-nav align-items-center ml-auto ml-md-0 ">
+                <ul class="navbar-nav align-items-center ml-auto ml-md-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link pr-4" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
+                        <a class="nav-link pr-4" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="media align-items-center">
                                 <i class="fa fa-user me-sm-1 text-white"></i>
-                                <div class="media-body  ml-2  d-none d-lg-block">
-                                    <span class="mb-0 text-sm font-weight-bold text-white">{{ $page.props.auth.user.name
-                                    }}</span>
+                                <div class="media-body ml-2 d-none d-lg-block">
+                                    <span class="mb-0 text-sm font-weight-bold text-white">{{ $page.props.auth.user.name }}</span>
                                 </div>
                             </div>
                         </a>
-                        <div class="dropdown-menu  dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item border-radius-md" href="#">
                                 <font-awesome-icon icon="fa-solid fa-user" />
                                 <span>Profile</span>
                             </a>
                             <Link href="/logout" as="button" method="post" class="dropdown-item">
-                            <i class="ni ni-user-run"></i>
-                            <span>Logout</span>
+                                <i class="ni ni-user-run"></i>
+                                <span>Logout</span>
                             </Link>
                         </div>
                     </li>
@@ -47,27 +44,18 @@
     </nav>
 </template>
 
-<script>
-import { Link } from '@inertiajs/vue3'
+<script setup>
+import { onBeforeMount } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-
-export default {
-    components: {
-        Link,
-    },
-    beforeMount() {
-        library.add(faUser)
-    },
-    methods: {
-
-    },
-}
+library.add(faUser);
 
 </script>
 
 <style lang="css">
-.bg__nav{
+.bg__nav {
     background-color: rgb(243, 198, 85) !important;
-}</style>
+}
+</style>

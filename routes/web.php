@@ -19,8 +19,19 @@ use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, "index"])->name('dashboard');
 
-Route::middleware([App\Http\Middleware\CorsMiddleware::class])->get('/test', function () {
-    return 'CORS should be handled here';
+//Vehicle-Categories
+Route::prefix('vehicle-category')->group(function () {
+    Route::get('/', [VehicleCategoryController::class, "index"])->name('vehicle-category.index');
+    Route::get('/all', [VehicleCategoryController::class, "all"])->name('vehicle-category.all');
+    Route::post('/store', [VehicleCategoryController::class, "store"])->name('vehicle-category.store');
+    Route::get('/{vehicle_id}/get', [VehicleCategoryController::class, "get"])->name('vehicle-category.get');
+    Route::delete('/{vehicle_id}/delete', [VehicleCategoryController::class, "delete"])->name('vehicle-category.delete');
+    Route::post('/{vehicle_id}/update', [VehicleCategoryController::class, "update"])->name('vehicle-category.update');
+    Route::get('/list', [VehicleCategoryController::class, "list"])->name('vehicle-category.list');
+    Route::post('/{vehicle_id}/changeStatus', [VehicleCategoryController::class, "changeStatus"])->name('vehicle-category.changeStatus');
+    Route::post('/{vehicle_id}/select/vehicle/delete', [VehicleCategoryController::class, 'deleteSelectedItems'])->name('vehicle-category.delete.selected');
+    Route::post('/select/vehicle/inactive', [VehicleCategoryController::class, 'inactiveSelectedItems'])->name('vehicle-category.inactive.selected');
+    Route::post('/select/vehicle/active', [VehicleCategoryController::class, 'activeSelectedItems'])->name('vehicle-category.active.selected');
 });
 
 
@@ -37,23 +48,6 @@ Route::prefix('material-category')->group(function () {
     Route::get('/{category_id}/get', [MaterialCategoryController::class, "get"])->name('materialCategory.get');
     Route::post('/{category_id}/update', [MaterialCategoryController::class, "update"])->name('materialCategory.update');
 });
-
-//Vehicle-Categories
-Route::prefix('vehicle-category')->group(function () {
-    Route::get('/', [VehicleCategoryController::class, "index"])->name('vehicle-category.index');
-    Route::get('/all', [VehicleCategoryController::class, "all"])->name('vehicle-category.all');
-    Route::post('/store', [VehicleCategoryController::class, "store"])->name('vehicle-category.store');
-    Route::get('/{vehicle_id}/get', [VehicleCategoryController::class, "get"])->name('vehicle-category.get');
-    Route::delete('/{vehicle_id}/delete', [VehicleCategoryController::class, "delete"])->name('vehicle-category.delete');
-    Route::post('/{vehicle_id}/update', [VehicleCategoryController::class, "update"])->name('vehicle-category.update');
-    Route::get('/list', [VehicleCategoryController::class, "list"])->name('vehicle-category.list');
-    Route::post('/{vehicle_id}/changeStatus', [VehicleCategoryController::class, "changeStatus"])->name('vehicle-category.changeStatus');
-
-    Route::post('/{vehicle_id}/select/vehicle/delete', [VehicleCategoryController::class, 'deleteSelectedItems'])->name('vehicle-category.delete.selected');
-    Route::post('/select/vehicle/inactive', [VehicleCategoryController::class, 'inactiveSelectedItems'])->name('vehicle-category.inactive.selected');
-    Route::post('/select/vehicle/active', [VehicleCategoryController::class, 'activeSelectedItems'])->name('vehicle-category.active.selected');
-});
-
 
 // Vendors
 Route::prefix('vendors')->group(function () {

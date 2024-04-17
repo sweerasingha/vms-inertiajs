@@ -12,6 +12,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Controllers\ParentController;
 use domain\Facades\VehicleCategoryFacade\VehicleCategoryFacade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class VehicleCategoryController extends ParentController
 {
@@ -28,6 +29,7 @@ class VehicleCategoryController extends ParentController
 
     public function all()
     {
+        Log::info('VehicleCategoryController.all');
         $query = VehicleCategory::orderBy('name');
         $payload = QueryBuilder::for($query)
             ->allowedSorts(['id', 'name'])

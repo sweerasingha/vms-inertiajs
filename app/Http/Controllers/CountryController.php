@@ -27,7 +27,7 @@ class CountryController extends ParentController
         //return Inertia::render('Settings/Country/all');
 
         if (Auth::user()->can('add_permissions')) {
-            return Inertia::render('Settings/Country/all');
+            return Inertia::render('Settings/Country/index');
         } else {
             $response['alert-danger'] = 'You do not have permission to read countries.';
             return redirect()->route('dashboard')->with($response);

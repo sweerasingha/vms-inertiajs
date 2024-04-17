@@ -132,21 +132,20 @@ class VehicleCategoryService
     }
 
     public function changeStatus(int $vehicle_id)
-{
-    $vehicle = $this->vehicle->find($vehicle_id);
-    if (!$vehicle) {
-        return response()->json(['error' => 'vehicle not found'], 404);
+    {
+        $vehicle = $this->vehicle->find($vehicle_id);
+        if (!$vehicle) {
+            return response()->json(['error' => 'vehicle not found'], 404);
+        }
+
+        // Toggle status for example, or set based on some condition or input
+        $vehicle->status = $vehicle->status == 1 ? 0 : 1;
+        $vehicle->save();
+https://www.duino.lk/product-category/sensors/proximity-sensors/
+        return response()->json([
+            'success' => true,
+            'message' => 'Status changed successfully',
+            'status' => $vehicle->status
+        ]);
     }
-
-    // Toggle status for example, or set based on some condition or input
-    $vehicle->status = $vehicle->status == 1 ? 0 : 1;
-    $vehicle->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Status changed successfully',
-        'status' => $vehicle->status
-    ]);
-}
-
 }

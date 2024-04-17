@@ -31,6 +31,7 @@
         "sweetalert2": "^11.10.7",
         "vue-multiselect": "^3.0.0",
         "vue-number-format": "^1.3.1",
+        "vue-router": "^4.3.0",
         "vue-select": "^4.0.0-beta.6",
         "vue3-apexcharts": "^1.5.2",
         "ziggy-js": "^2.1.0"

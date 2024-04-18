@@ -593,6 +593,7 @@ import {
 
 // Reactive state management with the Composition API
 const state = reactive({
+  loading: false,
   textClassHead: "text-start text-uppercase",
   textClassBody: "text-start",
   iconClassHead: "text-center",
@@ -636,6 +637,10 @@ watch(
     selectAll();
   }
 );
+
+const startLoading = () => (state.loading = true);
+const finishLoading = () => (state.loading = false);
+
 const getVehicleCategories = async () => {
   const response = await axios.get(route("vehicle-category.all"));
   state.vehicles = response.data.data;

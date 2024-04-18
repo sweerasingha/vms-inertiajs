@@ -31,8 +31,9 @@
             </li>
             <li class="nav-item">
               <Link
-                :class="{ active: isActive('/vendors') }"
+                :class="{ active: isActive('/vehicles') }"
                 class="nav-link active-preloader"
+                :href="route('vehicles.index')"
               >
                 <font-awesome-icon icon="fa-solid fa-building-user" />
                 <span class="ml-2 nav-link-text font-weight-400">Vehicles</span>

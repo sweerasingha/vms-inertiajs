@@ -4,11 +4,41 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleCategoryController;
+use App\Http\Controllers\VehicleContactBookController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehiclePreviousOwnerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, "index"])->name('dashboard');
+
+// vehicles
+Route::prefix('vehicles')->group(function () {
+    Route::get('/', [VehicleController::class, "index"])->name('vehicles.index');
+    Route::get('/all', [VehicleController::class, "all"])->name('vehicles.all');
+    Route::post('/store', [VehicleController::class, "store"])->name('vehicles.store');
+    Route::get('/{vehicle_id}/get', [VehicleController::class, "get"])->name('vehicles.get');
+    Route::get('/{vehicle_id}/edit', [VehicleController::class, "edit"])->name('vehicles.edit');
+
+    Route::post('/{vehicle_id}/basic/update', [VehicleController::class, "basicUpdate"])->name('vehicles.basic.update');
+    Route::delete('/{vehicle_id}/basic/delete', [VehicleController::class, "delete"])->name('vehicles.basic.delete');
+
+    Route::post('/{vehicle_id}/contact/update', [VehicleContactBookController::class, "update"])->name('vehicle.contact.update');
+    Route::get('/{vehicle_id}/contact/all', [VehicleContactBookController::class, "all"])->name('vehicle.contact.all');
+    Route::delete('/{vehicle_id}/contact/delete', [VehicleContactBookController::class, "delete"])->name('vehicle.contact.delete');
+
+    Route::post('/{vehicle_id}/bank/update', [VehiclePreviousOwnerController::class, "update"])->name('vehicle.bank.update');
+    Route::get('/{vehicle_id}/bank/all', [VehiclePreviousOwnerController::class, "all"])->name('vehicle.bank.all');
+    Route::delete('/{vehicle_id}/bank/delete', [VehiclePreviousOwnerController::class, "delete"])->name('vehicle.bank.delete');
+
+    Route::post('/select/vehicle/inactive', [VehicleController::class, 'inactiveSelectedItems'])->name('vehicle.inactive.selected');
+    Route::post('/select/vehicle/active', [VehicleController::class, 'activeSelectedItems'])->name('vehicle.active.selected');
+
+    Route::post('/select/vehicle/delete', [VehicleController::class, 'deleteSelectedItems'])->name('vehicle.delete.selected');
+
+    // Route::post('/{vehicle_id}/select/vehicle/delete', [VehicleController::class, 'deleteSelectedItems'])->name('vehicle.delete.selected');
+});
 
 //Vehicle-Categories
 Route::prefix('vehicle-category')->group(function () {

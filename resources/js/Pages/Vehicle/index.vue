@@ -460,7 +460,7 @@
                     </div>
                     <div class="row mb-1">
                       <div for="vehicle_category_id" class="col-md-3 col-form-label">
-                        vehicle_category
+                        CATEGORY
                       </div>
                       <div class="col-md-9">
                         <Multiselect
@@ -470,7 +470,7 @@
                           :close-on-select="true"
                           :clear-on-select="false"
                           :searchable="true"
-                          placeholder="Select vehicle_category"
+                          placeholder="Select Vehicle Category"
                           label="name"
                           track-by="id"
                         />
